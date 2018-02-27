@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>	
+	<title>Trajet</title>
+	<link rel="stylesheet" href="/milligram.css" />
+</head>
+<body>
+<form th:action="@{/creation_trajet}" method="post" th:object="${trajetForm}">
+    <div>
+        <label>Ville Depart</label>
+        <input type="text" th:field="*{villeDepart}"/>
+    </div>
+    <div>
+        <label>Ville Arrivee</label>
+        <input type="text" th:field="*{villeArrivee}"/>
+    </div>
+	<div>
+        <label>Date Depart</label>
+        <input type="date" th:field="*{dateDepart}"/>
+    </div>
+    <div>
+        <label>Prix</label>
+        <input type="number" th:field="*{prix}"/>
+    </div>
+    <div>
+        <label>Nombre de place</label>
+        <input type="number" th:field="*{nombreDePlace}"/>
+    </div>
+    <input type="submit" value="Valider"/>
+
+
+    <!--<div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">-->
+    <!--<p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>-->
+    <!--</div>-->
+
+</form>
+</body>
+</html>
