@@ -1,8 +1,8 @@
 package poe.spring.api;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ErrorController;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +16,8 @@ import poe.spring.service.UserManagerService;
 @RequestMapping("/api/user")
 public class UserRestController{
 	
+	private static final Logger LOG = LoggerFactory.getLogger(UserRestController.class);
+	
 	@Autowired
 	UserManagerService userManagerService;
 	
@@ -23,20 +25,20 @@ public class UserRestController{
 	@Chrono //Annotation precedement cree
 	public User save(@RequestBody(required=true) User user) {
 		User savedUser = userManagerService.signup(user.getLogin(), user.getPassword());
-		System.out.println("user id: " + savedUser);
+		LOG.debug("user id: " + savedUser);
 		return savedUser;
 	}
 	
 	@PostMapping("/delete")
 	public User delete(@RequestBody(required=true) User user) {
 		userManagerService.delete(user);
-		System.out.println("user deleted id: " + user);
+		LOG.debug("user deleted id: " + user);
 		return user;
 	}
 	
 	@PostMapping("/exist")
 	public boolean isExist(@RequestBody(required=true) User user) {
-		return userManagerService.isExist(user.getLogin(), user.getPassword());
+		return userManagerService.isExist(user.getLogin());
 	}
 	
 	@PostMapping("/all")

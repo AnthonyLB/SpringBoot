@@ -6,6 +6,8 @@ public class LoginCreationDelegate {
 	public static final int MAX_LOGIN_LENGTH = 10;
 	private static final String[] FORBIDDEN_LOGIN = {"toto","tatat","titi"};
 	
+	public LoginCreationDelegate() {};
+	
 	public static boolean isSizeValid(String login) {
 		boolean isValid;
 		isValid = login.length() >= MIN_LOGIN_LENGTH && login.length() <= MAX_LOGIN_LENGTH;

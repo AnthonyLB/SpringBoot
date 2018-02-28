@@ -2,6 +2,8 @@ package poe.spring.api.controller;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,8 @@ import poe.spring.service.UserManagerService;
 @RequestMapping("/sign_in")
 public class SignInController {
 
+	private static final Logger LOG = LoggerFactory.getLogger(SignInController.class);
+	
 	@Autowired
 	UserManagerService userManagerService;
 	
@@ -25,22 +29,11 @@ public class SignInController {
 	public String signIn(LoginForm form) {
 		return "sign_in"; //retour = nom du html
 	}
-	
-//	@PostMapping
-//	//username et password sont present dans sign_in.html (même nom)
-//	public String signInUser(String username, String password, RedirectAttributes attr) {
-//		System.out.println("username : "+username+", pwd : " + password);
-//		attr.addAttribute("username", username);
-//		attr.addAttribute("username", password);
-//		userManagerService.signup(username, password);
-//		return "redirect:/sign_in/success";
-//	}
-	
+		
 	@PostMapping
 	//username et password sont present dans sign_in.html (même nom)
 	public String signInUser(@Valid LoginForm form, BindingResult bindingResult, RedirectAttributes attr) {
-		System.out.println("login : "+ form.getLogin() +", pwd : " + form.getPassword());
-		
+		LOG.debug("login : "+ form.getLogin() +", pwd : " + form.getPassword());
 		if(bindingResult.hasErrors()) {
 			return "sign_in";
 		}

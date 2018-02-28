@@ -10,7 +10,7 @@ import poe.spring.repository.TrajetRepository;
 
 @Service
 public class TrajetManagerService {
-
+	
 	@Autowired
 	private TrajetRepository trajetRepository;
 	
@@ -21,7 +21,6 @@ public class TrajetManagerService {
 		trajet.setPrix(prix);
 		trajet.setVilleArrivee(villeArrivee);
 		trajet.setVilleDepart(villeDepart);
-		System.out.println("###################");
 		trajetRepository.save(trajet);
 		return trajet;
 	}

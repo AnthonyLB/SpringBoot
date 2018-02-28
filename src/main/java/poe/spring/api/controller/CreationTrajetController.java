@@ -2,6 +2,8 @@ package poe.spring.api.controller;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,8 @@ import poe.spring.service.TrajetManagerService;
 @RequestMapping("/creation_trajet")
 public class CreationTrajetController {
 
+	private static final Logger LOG = LoggerFactory.getLogger(CreationTrajetController.class);
+	
 	@Autowired
 	TrajetManagerService trajetManagerService;
 	
@@ -29,13 +33,11 @@ public class CreationTrajetController {
 	@PostMapping
 	//username et password sont present dans sign_in.html (même nom)
 	public String saveTrajet(@Valid TrajetForm form, BindingResult bindingResult, RedirectAttributes attr) {
-		System.out.println("ville depart : "+ form.getVilleDepart() +", pwd : " + form.getVilleArrivee());
-		
+		LOG.debug("ville depart : "+ form.getVilleDepart() +", pwd : " + form.getVilleArrivee());
 		if(bindingResult.hasErrors()) {
 			return "creation_trajet";
 		}
 		attr.addAttribute("message", "Creation of a trip");
-//		attr.addAttribute("password", form.getPassword());
 		trajetManagerService.save(form.getVilleDepart(), form.getVilleArrivee(), form.getDateDepart(), form.getPrix(), form.getNombreDePlace());
 		return "redirect:/creation_trajet/success";
 	}

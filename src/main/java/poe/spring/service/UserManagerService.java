@@ -16,7 +16,7 @@ public class UserManagerService {
 
 		User user = null;
 		
-		if(!isExist(login, password)) {
+		if(!isExist(login)) {
 			user = new User();
 			user.setLogin(login);
 			user.setPassword(password);
@@ -30,7 +30,7 @@ public class UserManagerService {
 		userRepository.delete(user);
 	}
 	
-	public boolean isExist(String login, String pwd) {
+	public boolean isExist(String login) {
 		
 		boolean isExist = false;
 		if(userRepository.findByLogin(login)!=null) isExist=true;
