@@ -1,5 +1,7 @@
 package poe.spring.api;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import poe.spring.aop.Chrono;
 import poe.spring.domain.User;
+import poe.spring.exception.DuplicateLoginBusinessException;
 import poe.spring.service.UserManagerService;
 
 @RestController
@@ -23,9 +26,13 @@ public class UserRestController{
 	
 	@PostMapping("/save")
 	@Chrono //Annotation precedement cree
-	public User save(@RequestBody(required=true) User user) {
-		User savedUser = userManagerService.signup(user.getLogin(), user.getPassword());
-		LOG.debug("user id: " + savedUser);
+	public User save(@RequestBody(required=true) User user, HttpServletResponse response) {
+		User savedUser = null;
+		try {
+			savedUser = userManagerService.signup(user.getLogin(), user.getPassword());
+		} catch (DuplicateLoginBusinessException e) {
+			response.setStatus(HttpServletResponse.SC_CONFLICT);
+		}
 		return savedUser;
 	}
 	

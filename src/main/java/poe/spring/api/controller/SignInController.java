@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import poe.spring.exception.DuplicateLoginBusinessException;
 import poe.spring.form.LoginForm;
 import poe.spring.service.UserManagerService;
 
@@ -32,16 +33,23 @@ public class SignInController {
 		
 	@PostMapping
 	//username et password sont present dans sign_in.html (même nom)
-	public String signInUser(@Valid LoginForm form, BindingResult bindingResult, RedirectAttributes attr) {
-		LOG.debug("login : "+ form.getLogin() +", pwd : " + form.getPassword());
-		if(bindingResult.hasErrors()) {
+	public String signInUser(@Valid LoginForm form, BindingResult bindingResult,
+			   RedirectAttributes attr, Model model) {
+		LOG.info("ajout d'un utilisateur login: {0}", form.getLogin());
+
+		if (bindingResult.hasErrors()) {
 			return "sign_in";
 		}
-		attr.addAttribute("username", form.getLogin());
-		attr.addAttribute("password", form.getPassword());
-		attr.addAttribute("message", "Sign in");
-		userManagerService.signup(form.getLogin(), form.getPassword());
-		return "redirect:/creation_trajet";
+
+
+		try {
+			userManagerService.signup(form.getLogin(), form.getPassword());
+		} catch (DuplicateLoginBusinessException e) {
+			model.addAttribute("error", "Ce login est déjà utilisé!");
+			return "sign_in";
+		}
+		attr.addAttribute("userName", form.getLogin());
+		return "redirect:/sign_in/success";
 	}
 	
 	

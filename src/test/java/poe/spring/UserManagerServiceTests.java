@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import poe.spring.domain.User;
+import poe.spring.exception.DuplicateLoginBusinessException;
 import poe.spring.repository.UserRepository;
 import poe.spring.service.UserManagerService;
 
@@ -23,7 +24,7 @@ public class UserManagerServiceTests {
 	UserRepository userRepository;
 	
 	@Test
-	public void checkUserCreation() {
+	public void checkUserCreation() throws DuplicateLoginBusinessException {
 		assertThat("toto").isEqualTo("toto");
 		
 		//Enregistre un utilisateur en BDD

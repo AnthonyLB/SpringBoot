@@ -1,8 +1,12 @@
 package poe.spring.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.stereotype.Service;
+import poe.spring.exception.DuplicateLoginBusinessException;
 import poe.spring.domain.User;
 import poe.spring.repository.UserRepository;
 
@@ -12,7 +16,10 @@ public class UserManagerService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public User signup(String login, String password) {
+	@Autowired
+	private InMemoryUserDetailsManager inMemoryUserDetailsManager;
+	
+	public User signup(String login, String password) throws DuplicateLoginBusinessException {
 
 		User user = null;
 		
@@ -21,7 +28,8 @@ public class UserManagerService {
 			user.setLogin(login);
 			user.setPassword(password);
 			userRepository.save(user);
-		}		
+			inMemoryUserDetailsManager.createUser(new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), new ArrayList<GrantedAuthority>()));
+		}else throw new DuplicateLoginBusinessException();
 
 		return user;
 	}
